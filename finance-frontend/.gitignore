@@ -1,0 +1,23 @@
+# node
+node_modules/
+dist/
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# env
+.env
+.env.*
+
+# db
+*.db
+*.sqlite3
+
+# model artifacts (kalau ada)
+indobert-dataset-final/
+*.safetensors
+*.bin
+*.pt
+*.ckpt
