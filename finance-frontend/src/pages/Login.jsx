@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../api";
-import "../styles/auth.css";
 
 export default function Login() {
   const nav = useNavigate();
@@ -21,56 +20,124 @@ export default function Login() {
       });
       localStorage.setItem("token", res.access_token);
       nav("/setup-income");
-    } catch (e2) {
-      setErr(e2.message || "Login gagal");
+    } catch (e) {
+      setErr(e.message || "Login gagal");
     } finally {
       setBusy(false);
     }
   }
 
+  const pageStyle = {
+    minHeight: "100vh",
+    display: "grid",
+    placeItems: "center",
+    padding: 24,
+    background:
+      "radial-gradient(1200px 600px at 20% 10%, rgba(124,58,237,0.35), transparent), radial-gradient(1200px 600px at 90% 10%, rgba(34,197,94,0.25), transparent), #0b1020",
+    color: "#fff",
+  };
+
+  const cardStyle = {
+    width: "100%",
+    maxWidth: 420,
+    background: "rgba(255,255,255,0.06)",
+    border: "1px solid rgba(255,255,255,0.12)",
+    borderRadius: 20,
+    padding: 24,
+    boxShadow: "0 20px 40px rgba(0,0,0,0.35)",
+    display: "grid",
+    gap: 18,
+  };
+
+  const inputStyle = {
+    padding: 14,
+    borderRadius: 14,
+    border: "1px solid rgba(255,255,255,0.18)",
+    background: "rgba(255,255,255,0.06)",
+    color: "#fff",
+    outline: "none",
+  };
+
+  const btnStyle = {
+    height: 46,
+    borderRadius: 14,
+    border: "1px solid rgba(255,255,255,0.18)",
+    background: "linear-gradient(90deg, rgba(124,58,237,0.9), rgba(34,197,94,0.8))",
+    color: "#fff",
+    fontWeight: 900,
+    cursor: "pointer",
+  };
+
   return (
-    <div className="auth-page">
-      <div className="auth-card">
-        <div className="auth-card__top">
-          <div className="brand">
-            <div className="brand-badge" />
-            <div>
-              <div className="brand-title">Financial Planner</div>
-              <div className="mini">Login untuk lanjut budgeting</div>
-            </div>
+    <div style={pageStyle}>
+      <form onSubmit={onSubmit} style={cardStyle}>
+        <div>
+          <div style={{ opacity: 0.8, fontSize: 13 }}>Financial Planner</div>
+          <h1 style={{ margin: "6px 0 4px", fontSize: 28 }}>Welcome back</h1>
+          <div style={{ opacity: 0.8, fontSize: 14 }}>
+            Masuk pakai username atau email.
           </div>
-          <h1 className="auth-title">Welcome back</h1>
-          <p className="auth-subtitle">Masuk pakai username atau email.</p>
         </div>
 
-        <div className="auth-card__body">
-          <form className="form" onSubmit={onSubmit}>
-            <div className="field">
-              <label>Username / Email</label>
-              <input className="input" value={identifier} onChange={(e) => setIdentifier(e.target.value)} />
-            </div>
+        {err && (
+          <div
+            style={{
+              padding: 12,
+              borderRadius: 12,
+              border: "1px solid rgba(239,68,68,0.35)",
+              background: "rgba(239,68,68,0.12)",
+              color: "#fecaca",
+              fontSize: 14,
+            }}
+          >
+            Error{"\n"}{String(err)}
+          </div>
+        )}
 
-            <div className="field">
-              <div className="row">
-                <label>Password</label>
-                <span className="mini">min. 6 karakter</span>
-              </div>
-              <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            </div>
-
-            <button className="btn" disabled={busy}>
-              {busy ? "Loading..." : "Login"}
-            </button>
-
-            {err && <div className="alert">Error\n{String(err)}</div>}
-
-            <div className="divider" />
-            <p className="footer-note">
-              Belum punya akun? <Link className="link" to="/register">Register</Link>
-            </p>
-          </form>
+        <div style={{ display: "grid", gap: 10 }}>
+          <label style={{ fontSize: 13, opacity: 0.85 }}>
+            Username / Email
+          </label>
+          <input
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+            style={inputStyle}
+          />
         </div>
-      </div>
+
+        <div style={{ display: "grid", gap: 10 }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <label style={{ fontSize: 13, opacity: 0.85 }}>Password</label>
+            <span style={{ fontSize: 12, opacity: 0.7 }}>
+              min. 6 karakter
+            </span>
+          </div>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={inputStyle}
+          />
+        </div>
+
+        <button disabled={busy} style={{ ...btnStyle, opacity: busy ? 0.7 : 1 }}>
+          {busy ? "Loading..." : "Login"}
+        </button>
+
+        <div
+          style={{
+            marginTop: 6,
+            fontSize: 13,
+            opacity: 0.85,
+            textAlign: "center",
+          }}
+        >
+          Belum punya akun?{" "}
+          <Link to="/register" style={{ color: "#a78bfa", fontWeight: 700 }}>
+            Register
+          </Link>
+        </div>
+      </form>
     </div>
   );
 }
